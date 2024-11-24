@@ -70,7 +70,7 @@ VSCode v1.93の新しい[シェル統合アップデート](https://code.visuals
 
 Clineはエディターでファイルを直接作成および編集し、変更の差分ビューを表示します。差分ビューエディターでClineの変更を直接編集または元に戻すか、結果に満足するまでチャットでフィードバックを提供できます。Clineはリンター/コンパイラのエラー（インポートの欠落、構文エラーなど）も監視するため、その過程で発生する問題を独自に修正できます。
 
-Clineによって行われたすべての変更はファイルのタイムラインに記録されるため、必要に応じて変更を追跡および元に戻すことができます。
+すべての変更はファイルのタイムラインに記録されるため、必要に応じて変更を追跡および元に戻すことができます。
 
 <!-- Transparent pixel to create line break after floating image -->
 
@@ -123,3 +123,75 @@ Clineに「アプリをテストする」ように依頼してみてください
 ## ライセンス
 
 [Apache 2.0 © 2024 Cline Bot Inc.](./LICENSE)
+
+## プロジェクト構成
+
+このプロジェクトはVS Code拡張機能で、大きく分けて以下の2つの主要な部分から構成されています。
+
+**1. バックエンド (TypeScript): `src` ディレクトリ**
+
+*   **コアロジック**:  拡張機能の中核となる機能。AIモデルとの連携、VS Code APIとの統合、内部データ処理などを含みます。
+    *   `api`: さまざまなAIモデルプロバイダーとのインターフェース。
+    *   `core`:  主要なロジックとデータ構造。
+    *   `exports`:  公開API。
+    *   `integrations`:  VS Codeエディタ、ターミナル、ワークスペースとの統合。
+    *   `services`:  補助的なサービス（ファイルシステム操作など）。
+    *   `shared`:  共有ユーティリティ関数。
+    *   `test`:  テストコード。
+    *   `utils`:  ユーティリティ関数。
+
+*   **図解:**
+
+```
+src/
+├── api/
+├── core/
+├── exports/
+├── integrations/
+│   ├── diagnostics/
+│   ├── editor/
+│   ├── misc/
+│   ├── terminal/
+│   ├── theme/
+│   └── workspace/
+├── services/
+│   ├── browser/
+│   ├── glob/
+│   ├── ripgrep/
+│   └── tree-sitter/
+├── shared/
+├── test/
+└── utils/
+```
+
+
+**2. フロントエンド (React): `webview-ui` ディレクトリ**
+
+*   ユーザーインターフェース:  ユーザーが対話する部分。チャット画面、設定画面など。
+    *   `public`: 静的ファイル。
+    *   `src`: Reactコンポーネント。
+
+*   **図解:**
+
+```
+webview-ui/
+├── public/
+└── src/
+    ├── App.tsx
+    ├── components/
+    │   ├── chat/
+    │   ├── common/
+    │   ├── history/
+    │   └── settings/
+    ├── context/
+    └── utils/
+```
+
+**その他:**
+
+*   `assets`:  アイコンなどのアセットファイル。
+*   `package.json`:  プロジェクトの依存関係。
+*   `tsconfig.json`:  TypeScriptコンパイラの設定。
+
+
+この階層構造により、コードの保守性と拡張性が向上しています。
